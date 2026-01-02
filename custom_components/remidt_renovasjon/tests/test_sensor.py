@@ -164,7 +164,7 @@ class TestRenovasjonSensor:
         device_info = sensor._attr_device_info
 
         assert device_info is not None
-        assert ("renovasjon", "test_entry_id") in device_info["identifiers"]
+        assert ("remidt_renovasjon", "test_entry_id") in device_info["identifiers"]
         assert "Renovasjon Test Street 1" in device_info["name"]
         assert device_info["manufacturer"] == "Renovasjonsportal"
         assert device_info["model"] == "Test Municipality"

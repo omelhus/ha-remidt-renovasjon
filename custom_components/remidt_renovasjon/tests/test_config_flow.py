@@ -55,8 +55,8 @@ class TestRenovasjonConfigFlow:
         ]
 
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.search_address.return_value = mock_addresses
@@ -71,8 +71,8 @@ class TestRenovasjonConfigFlow:
     async def test_step_user_no_addresses_found(self, flow: RenovasjonConfigFlow):
         """Test address search with no results shows error."""
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.search_address.return_value = []
@@ -88,8 +88,8 @@ class TestRenovasjonConfigFlow:
     async def test_step_user_connection_error(self, flow: RenovasjonConfigFlow):
         """Test address search with connection error."""
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.search_address.side_effect = RenovasjonConnectionError("Connection failed")
@@ -105,8 +105,8 @@ class TestRenovasjonConfigFlow:
     async def test_step_user_api_error(self, flow: RenovasjonConfigFlow):
         """Test address search with API error."""
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.search_address.side_effect = RenovasjonApiError("API error")
@@ -151,8 +151,8 @@ class TestRenovasjonConfigFlow:
         ]
 
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
             patch.object(flow, "async_set_unique_id", new_callable=AsyncMock),
             patch.object(flow, "_abort_if_unique_id_configured"),
         ):
@@ -197,8 +197,8 @@ class TestRenovasjonConfigFlow:
         ]
 
         with (
-            patch("renovasjon.config_flow.async_get_clientsession"),
-            patch("renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.config_flow.async_get_clientsession"),
+            patch("remidt_renovasjon.config_flow.RenovasjonApiClient") as mock_client_class,
             patch.object(flow, "async_set_unique_id", new_callable=AsyncMock),
             patch.object(flow, "_abort_if_unique_id_configured"),
         ):

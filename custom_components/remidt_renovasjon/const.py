@@ -1,9 +1,9 @@
-"""Constants for the Renovasjonsportal integration."""
+"""Constants for the ReMidt Renovasjon integration."""
 
 from datetime import timedelta
 from typing import Final
 
-DOMAIN: Final = "renovasjon"
+DOMAIN: Final = "remidt_renovasjon"
 
 # API endpoints
 API_BASE_URL: Final = "https://kalender.renovasjonsportal.no/api"

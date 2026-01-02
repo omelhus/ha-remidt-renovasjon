@@ -39,7 +39,7 @@ class TestAsyncSetupEntry:
         """Test successful setup of config entry."""
         from .. import async_setup_entry
 
-        with patch("renovasjon.RenovasjonCoordinator") as mock_coordinator_class:
+        with patch("remidt_renovasjon.RenovasjonCoordinator") as mock_coordinator_class:
             mock_coordinator = MagicMock()
             mock_coordinator_class.return_value = mock_coordinator
 

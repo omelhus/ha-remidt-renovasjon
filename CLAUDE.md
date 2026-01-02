@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Home Assistant custom integration for Renovasjonsportal - a Norwegian waste collection schedule service. It creates sensors for each waste fraction (restavfall, matavfall, papir, plastemballasje, glass/metall) showing the next collection date.
+Home Assistant custom integration for ReMidt Renovasjon - Norwegian waste collection schedules via renovasjonsportal.no. Creates sensors for each waste fraction (restavfall, matavfall, papir, plastemballasje, glass/metall) showing the next collection date.
 
 ## Commands
 
@@ -16,7 +16,7 @@ uv sync --extra dev
 Run tests:
 ```bash
 uv run pytest
-uv run pytest custom_components/renovasjon/tests/test_api.py  # single file
+uv run pytest custom_components/remidt_renovasjon/tests/test_api.py  # single file
 uv run pytest -k test_search_address_success  # single test by name
 ```
 
@@ -28,7 +28,7 @@ uv run ruff format .
 
 ## Architecture
 
-Standard Home Assistant integration pattern in `custom_components/renovasjon/`:
+Standard Home Assistant integration pattern in `custom_components/remidt_renovasjon/`:
 
 - `api.py` - Async API client using aiohttp. Dataclasses: `AddressSearchResult`, `WasteDisposal`. Custom exceptions: `RenovasjonApiError`, `RenovasjonConnectionError`, `RenovasjonAddressNotFoundError`
 - `coordinator.py` - `RenovasjonCoordinator` extends `DataUpdateCoordinator`, fetches data every 12 hours. `RenovasjonData` container provides helper methods for accessing disposal schedules
@@ -44,4 +44,4 @@ Base URL: `https://kalender.renovasjonsportal.no/api`
 
 ## Testing
 
-Tests in `custom_components/renovasjon/tests/`. Mock responses defined in `conftest.py`. Use `create_mock_response()` helper for aiohttp response mocks.
+Tests in `custom_components/remidt_renovasjon/tests/`. Mock responses defined in `conftest.py`. Use `create_mock_response()` helper for aiohttp response mocks.

@@ -124,7 +124,7 @@ def mock_aiohttp_session() -> Generator[MagicMock, None, None]:
 @pytest.fixture
 def mock_api_client() -> Generator[AsyncMock, None, None]:
     """Create a mock API client."""
-    with patch("renovasjon.api.RenovasjonApiClient") as mock_client_class:
+    with patch("remidt_renovasjon.api.RenovasjonApiClient") as mock_client_class:
         mock_client = AsyncMock()
         mock_client_class.return_value = mock_client
         yield mock_client

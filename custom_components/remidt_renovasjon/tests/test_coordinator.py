@@ -152,8 +152,8 @@ class TestRenovasjonCoordinator:
         }
 
         with (
-            patch("renovasjon.coordinator.async_get_clientsession"),
-            patch("renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.coordinator.async_get_clientsession"),
+            patch("remidt_renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.get_disposals_by_fraction.return_value = mock_disposals
@@ -172,8 +172,8 @@ class TestRenovasjonCoordinator:
     ):
         """Test data update with connection error."""
         with (
-            patch("renovasjon.coordinator.async_get_clientsession"),
-            patch("renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.coordinator.async_get_clientsession"),
+            patch("remidt_renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.get_disposals_by_fraction.side_effect = RenovasjonConnectionError(
@@ -192,8 +192,8 @@ class TestRenovasjonCoordinator:
     ):
         """Test data update with API error."""
         with (
-            patch("renovasjon.coordinator.async_get_clientsession"),
-            patch("renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
+            patch("remidt_renovasjon.coordinator.async_get_clientsession"),
+            patch("remidt_renovasjon.coordinator.RenovasjonApiClient") as mock_client_class,
         ):
             mock_client = AsyncMock()
             mock_client.get_disposals_by_fraction.side_effect = RenovasjonApiError("API failed")
