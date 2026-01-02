@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Search for your address",
+        "description": "Enter your street address to find your waste collection schedule. Example: {example}",
+        "data": {
+          "address": "Address"
+        }
+      },
+      "select": {
+        "title": "Select your address",
+        "description": "Found {count} matching address(es). Please select your address:",
+        "data": {
+          "address_id": "Address"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Renovasjonsportal",
+      "no_addresses_found": "No addresses found. Try a different search term.",
+      "invalid_address": "Invalid address selected",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "This address is already configured"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "restavfall": {
+        "name": "Residual waste"
+      },
+      "matavfall": {
+        "name": "Food waste"
+      },
+      "papir": {
+        "name": "Paper"
+      },
+      "plastemballasje": {
+        "name": "Plastic packaging"
+      },
+      "glass_metall": {
+        "name": "Glass and metal"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Søk etter din adresse",
+        "description": "Skriv inn gateadressen din for å finne renovasjonskalenderen. Eksempel: {example}",
+        "data": {
+          "address": "Adresse"
+        }
+      },
+      "select": {
+        "title": "Velg din adresse",
+        "description": "Fant {count} matchende adresse(r). Velg din adresse:",
+        "data": {
+          "address_id": "Adresse"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunne ikke koble til Renovasjonsportalen",
+      "no_addresses_found": "Ingen adresser funnet. Prøv et annet søkeord.",
+      "invalid_address": "Ugyldig adresse valgt",
+      "unknown": "En uventet feil oppstod"
+    },
+    "abort": {
+      "already_configured": "Denne adressen er allerede konfigurert"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "restavfall": {
+        "name": "Restavfall"
+      },
+      "matavfall": {
+        "name": "Matavfall"
+      },
+      "papir": {
+        "name": "Papir"
+      },
+      "plastemballasje": {
+        "name": "Plastemballasje"
+      },
+      "glass_metall": {
+        "name": "Glass og metall"
+      }
+    }
+  }
+}
