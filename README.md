@@ -12,28 +12,21 @@ A Home Assistant custom integration for Norwegian waste collection schedules via
 
 ## Installation
 
+### HACS Installation (Recommended)
+
+1. Open HACS in your Home Assistant instance
+2. Click the three dots in the top right corner
+3. Select "Custom repositories"
+4. Add this repository URL and select "Integration" as the category
+5. Click "Add"
+6. Search for "Renovasjonsportal" and install it
+7. Restart Home Assistant
+
 ### Manual Installation
 
-1. Copy the `renovasjon` folder to your Home Assistant `custom_components` directory:
-   ```
-   custom_components/
-   └── renovasjon/
-       ├── __init__.py
-       ├── api.py
-       ├── config_flow.py
-       ├── const.py
-       ├── coordinator.py
-       ├── manifest.json
-       ├── sensor.py
-       ├── strings.json
-       └── translations/
-   ```
-
-2. Restart Home Assistant
-
-### HACS Installation
-
-This integration is not yet available in HACS. Use manual installation.
+1. Download the `custom_components/renovasjon` folder from this repository
+2. Copy it to your Home Assistant `custom_components` directory
+3. Restart Home Assistant
 
 ## Configuration
 
@@ -67,7 +60,7 @@ uv sync --extra dev
 
 ```bash
 uv run pytest
-uv run pytest tests/test_api.py -v  # verbose single file
+uv run pytest custom_components/renovasjon/tests/test_api.py -v  # verbose single file
 uv run pytest -k test_search_address_success  # single test
 ```
 
@@ -81,7 +74,7 @@ uv run ruff format .
 ### Project Structure
 
 ```
-renovasjon/
+custom_components/renovasjon/
 ├── api.py           # API client for renovasjonsportal.no
 ├── config_flow.py   # Setup wizard (address search and selection)
 ├── const.py         # Constants and configuration

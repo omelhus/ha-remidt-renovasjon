@@ -16,8 +16,8 @@ uv sync --extra dev
 Run tests:
 ```bash
 uv run pytest
-uv run pytest tests/test_api.py  # single file
-uv run pytest tests/test_api.py::TestRenovasjonApiClient::test_search_address_success  # single test
+uv run pytest custom_components/renovasjon/tests/test_api.py  # single file
+uv run pytest -k test_search_address_success  # single test by name
 ```
 
 Lint:
@@ -28,7 +28,7 @@ uv run ruff format .
 
 ## Architecture
 
-Standard Home Assistant integration pattern:
+Standard Home Assistant integration pattern in `custom_components/renovasjon/`:
 
 - `api.py` - Async API client using aiohttp. Dataclasses: `AddressSearchResult`, `WasteDisposal`. Custom exceptions: `RenovasjonApiError`, `RenovasjonConnectionError`, `RenovasjonAddressNotFoundError`
 - `coordinator.py` - `RenovasjonCoordinator` extends `DataUpdateCoordinator`, fetches data every 12 hours. `RenovasjonData` container provides helper methods for accessing disposal schedules
@@ -44,4 +44,4 @@ Base URL: `https://kalender.renovasjonsportal.no/api`
 
 ## Testing
 
-Tests use pytest with async support. Mock responses defined in `tests/conftest.py`. Use `create_mock_response()` helper for aiohttp response mocks.
+Tests in `custom_components/renovasjon/tests/`. Mock responses defined in `conftest.py`. Use `create_mock_response()` helper for aiohttp response mocks.
