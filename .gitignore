@@ -59,3 +59,4 @@ secrets.yaml
 
 # uv
 .python-version
+.claude/
