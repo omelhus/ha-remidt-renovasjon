@@ -12,7 +12,13 @@ from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, WASTE_FRACTIONS
+from .const import (
+    CALENDAR_LOOKAHEAD_DAYS,
+    CONF_ADDRESS_NAME,
+    CONF_MUNICIPALITY,
+    DOMAIN,
+    WASTE_FRACTIONS,
+)
 from .coordinator import RenovasjonCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,6 +31,9 @@ async def async_setup_entry(
 ) -> None:
     """Set up ReMidt Renovasjon calendar based on a config entry."""
     coordinator: RenovasjonCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # Wait for first data fetch
+    await coordinator.async_config_entry_first_refresh()
 
     async_add_entities([RenovasjonCalendar(coordinator)])
 
@@ -43,9 +52,9 @@ class RenovasjonCalendar(CoordinatorEntity[RenovasjonCoordinator], CalendarEntit
 
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
-            name=f"Renovasjon {coordinator.data.address_name}",
+            name=f"Renovasjon {coordinator.config_entry.data[CONF_ADDRESS_NAME]}",
             manufacturer="Renovasjonsportal",
-            model=coordinator.data.municipality,
+            model=coordinator.config_entry.data[CONF_MUNICIPALITY],
             entry_type=DeviceEntryType.SERVICE,
         )
 
@@ -57,7 +66,7 @@ class RenovasjonCalendar(CoordinatorEntity[RenovasjonCoordinator], CalendarEntit
 
         events = self._get_events_for_range(
             date.today(),
-            date.today() + timedelta(days=365),
+            date.today() + timedelta(days=CALENDAR_LOOKAHEAD_DAYS),
         )
 
         if not events:

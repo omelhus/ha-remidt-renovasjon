@@ -18,6 +18,9 @@ CONF_MUNICIPALITY: Final = "municipality"
 # Update interval - once per day is sufficient for waste collection schedules
 UPDATE_INTERVAL: Final = timedelta(hours=12)
 
+# Calendar lookahead for finding next event
+CALENDAR_LOOKAHEAD_DAYS: Final = 365
+
 # Waste fractions with icons and translations
 WASTE_FRACTIONS: Final = {
     "Restavfall": {

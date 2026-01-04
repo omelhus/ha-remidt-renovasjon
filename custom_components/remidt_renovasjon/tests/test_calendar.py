@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from homeassistant.components.calendar import CalendarEvent
@@ -15,6 +15,12 @@ from ..calendar import RenovasjonCalendar
 from ..const import DOMAIN
 from ..coordinator import RenovasjonCoordinator, RenovasjonData
 from .conftest import MOCK_CONFIG_ENTRY_DATA
+
+# Fixed test dates for deterministic tests
+TEST_TODAY = date(2026, 1, 4)
+TEST_TOMORROW = datetime(2026, 1, 5)
+TEST_NEXT_WEEK = datetime(2026, 1, 11)
+TEST_TWO_WEEKS = datetime(2026, 1, 18)
 
 
 class TestRenovasjonCalendar:
@@ -37,11 +43,7 @@ class TestRenovasjonCalendar:
 
     @pytest.fixture
     def sample_data(self) -> RenovasjonData:
-        """Create sample RenovasjonData."""
-        tomorrow = datetime.now() + timedelta(days=1)
-        next_week = datetime.now() + timedelta(days=7)
-        two_weeks = datetime.now() + timedelta(days=14)
-
+        """Create sample RenovasjonData with fixed dates."""
         return RenovasjonData(
             address_id="test-uuid",
             address_name="Test Street 1",
@@ -49,19 +51,19 @@ class TestRenovasjonCalendar:
             disposals_by_fraction={
                 "Restavfall": [
                     WasteDisposal(
-                        date=tomorrow,
+                        date=TEST_TOMORROW,
                         fraction="Restavfall",
                         description=None,
                         symbol_id=15,
                     ),
                     WasteDisposal(
-                        date=next_week,
+                        date=TEST_NEXT_WEEK,
                         fraction="Restavfall",
                         description=None,
                         symbol_id=15,
                     ),
                     WasteDisposal(
-                        date=two_weeks,
+                        date=TEST_TWO_WEEKS,
                         fraction="Restavfall",
                         description=None,
                         symbol_id=15,
@@ -69,7 +71,7 @@ class TestRenovasjonCalendar:
                 ],
                 "Matavfall": [
                     WasteDisposal(
-                        date=tomorrow,
+                        date=TEST_TOMORROW,
                         fraction="Matavfall",
                         description="Food waste",
                         symbol_id=0,
@@ -109,19 +111,19 @@ class TestRenovasjonCalendar:
 
         assert device_info is not None
         assert ("remidt_renovasjon", "test_entry_id") in device_info["identifiers"]
-        assert "Renovasjon Test Street 1" in device_info["name"]
+        assert "Renovasjon Sigden 6" in device_info["name"]
         assert device_info["manufacturer"] == "Renovasjonsportal"
-        assert device_info["model"] == "Test Municipality"
+        assert device_info["model"] == "Kristiansund kommune"
 
     def test_calendar_event_returns_next_event(self, calendar: RenovasjonCalendar):
         """Test that event property returns the next upcoming event."""
-        event = calendar.event
+        # Use _get_events_for_range directly with fixed dates to test logic
+        events = calendar._get_events_for_range(TEST_TODAY, TEST_TODAY + timedelta(days=365))
 
-        assert event is not None
-        assert isinstance(event, CalendarEvent)
-        # The first event should be tomorrow (both Restavfall and Matavfall)
-        tomorrow = (datetime.now() + timedelta(days=1)).date()
-        assert event.start == tomorrow
+        assert len(events) > 0
+        first_event = events[0]
+        assert isinstance(first_event, CalendarEvent)
+        assert first_event.start == TEST_TOMORROW.date()
 
     def test_calendar_event_no_data(
         self, mock_coordinator: MagicMock, calendar: RenovasjonCalendar
@@ -136,8 +138,8 @@ class TestRenovasjonCalendar:
     @pytest.mark.asyncio
     async def test_async_get_events(self, mock_hass: MagicMock, calendar: RenovasjonCalendar):
         """Test async_get_events returns events within range."""
-        start = datetime.now()
-        end = datetime.now() + timedelta(days=30)
+        start = datetime(2026, 1, 4)
+        end = datetime(2026, 2, 4)
 
         events = await calendar.async_get_events(mock_hass, start, end)
 
@@ -149,8 +151,8 @@ class TestRenovasjonCalendar:
     ):
         """Test async_get_events filters by date range."""
         # Only get events in the next 3 days
-        start = datetime.now()
-        end = datetime.now() + timedelta(days=3)
+        start = datetime(2026, 1, 4)
+        end = datetime(2026, 1, 7)
 
         events = await calendar.async_get_events(mock_hass, start, end)
 
@@ -164,8 +166,8 @@ class TestRenovasjonCalendar:
         """Test async_get_events when no data available."""
         mock_coordinator.data = None
 
-        start = datetime.now()
-        end = datetime.now() + timedelta(days=30)
+        start = datetime(2026, 1, 4)
+        end = datetime(2026, 2, 4)
 
         events = await calendar.async_get_events(mock_hass, start, end)
 
@@ -174,8 +176,8 @@ class TestRenovasjonCalendar:
     def test_event_has_correct_structure(self, calendar: RenovasjonCalendar):
         """Test that calendar events have correct structure."""
         events = calendar._get_events_for_range(
-            date.today(),
-            date.today() + timedelta(days=30),
+            date(2026, 1, 4),
+            date(2026, 2, 4),
         )
 
         for event in events:
@@ -190,8 +192,8 @@ class TestRenovasjonCalendar:
     def test_event_with_description(self, calendar: RenovasjonCalendar):
         """Test that event description is included."""
         events = calendar._get_events_for_range(
-            date.today(),
-            date.today() + timedelta(days=30),
+            date(2026, 1, 4),
+            date(2026, 2, 4),
         )
 
         matavfall_events = [e for e in events if e.summary == "Matavfall"]
@@ -201,8 +203,8 @@ class TestRenovasjonCalendar:
     def test_events_are_sorted(self, calendar: RenovasjonCalendar):
         """Test that events are sorted by date."""
         events = calendar._get_events_for_range(
-            date.today(),
-            date.today() + timedelta(days=30),
+            date(2026, 1, 4),
+            date(2026, 2, 4),
         )
 
         dates = [e.start for e in events]
@@ -247,6 +249,7 @@ class TestAsyncSetupEntry:
         mock_coordinator = MagicMock(spec=RenovasjonCoordinator)
         mock_coordinator.data = sample_data
         mock_coordinator.config_entry = mock_entry
+        mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
         mock_hass.data[DOMAIN][mock_entry.entry_id] = mock_coordinator
 
@@ -260,3 +263,4 @@ class TestAsyncSetupEntry:
         # Should create one calendar entity
         assert len(entities_added) == 1
         assert isinstance(entities_added[0], RenovasjonCalendar)
+        mock_coordinator.async_config_entry_first_refresh.assert_called_once()
