@@ -231,8 +231,10 @@ class TestRenovasjonOptionsFlow:
 
     @pytest.fixture
     def options_flow(self, mock_entry: MagicMock) -> RenovasjonOptionsFlow:
-        """Create an options flow instance."""
-        return RenovasjonOptionsFlow(mock_entry)
+        """Create an options flow instance with mocked config_entry."""
+        flow = RenovasjonOptionsFlow()
+        type(flow).config_entry = property(lambda self: mock_entry)
+        return flow
 
     @pytest.mark.asyncio
     async def test_options_flow_shows_form(self, options_flow: RenovasjonOptionsFlow):
@@ -267,9 +269,10 @@ class TestRenovasjonOptionsFlow:
     async def test_options_flow_preserves_existing_interval(self, mock_entry: MagicMock):
         """Test that options flow shows existing interval value."""
         mock_entry.options = {CONF_UPDATE_INTERVAL: 6}
-        options_flow = RenovasjonOptionsFlow(mock_entry)
+        flow = RenovasjonOptionsFlow()
+        type(flow).config_entry = property(lambda self: mock_entry)
 
-        result = await options_flow.async_step_init(user_input=None)
+        result = await flow.async_step_init(user_input=None)
 
         assert result["type"] == FlowResultType.FORM
 
