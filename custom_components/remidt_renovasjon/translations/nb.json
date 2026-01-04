@@ -14,6 +14,20 @@
         "data": {
           "address_id": "Adresse"
         }
+      },
+      "reconfigure": {
+        "title": "Endre din adresse",
+        "description": "Skriv inn en ny gateadresse å søke etter. Eksempel: {example}",
+        "data": {
+          "address": "Adresse"
+        }
+      },
+      "reconfigure_select": {
+        "title": "Velg ny adresse",
+        "description": "Fant {count} matchende adresse(r). Velg din nye adresse:",
+        "data": {
+          "address_id": "Adresse"
+        }
       }
     },
     "error": {
@@ -23,7 +37,19 @@
       "unknown": "En uventet feil oppstod"
     },
     "abort": {
-      "already_configured": "Denne adressen er allerede konfigurert"
+      "already_configured": "Denne adressen er allerede konfigurert",
+      "reconfigure_successful": "Adresse endret"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Konfigurer ReMidt Renovasjon",
+        "description": "Juster integrasjonsinnstillinger",
+        "data": {
+          "update_interval": "Oppdateringsintervall (timer)"
+        }
+      }
     }
   },
   "entity": {
@@ -42,6 +68,23 @@
       },
       "glass_metall": {
         "name": "Glass og metall"
+      }
+    },
+    "binary_sensor": {
+      "restavfall_today": {
+        "name": "Restavfall i dag"
+      },
+      "matavfall_today": {
+        "name": "Matavfall i dag"
+      },
+      "papir_today": {
+        "name": "Papir i dag"
+      },
+      "plastemballasje_today": {
+        "name": "Plastemballasje i dag"
+      },
+      "glass_metall_today": {
+        "name": "Glass og metall i dag"
       }
     }
   }

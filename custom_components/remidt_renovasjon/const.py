@@ -15,8 +15,12 @@ CONF_ADDRESS_ID: Final = "address_id"
 CONF_ADDRESS_NAME: Final = "address_name"
 CONF_MUNICIPALITY: Final = "municipality"
 
-# Update interval - once per day is sufficient for waste collection schedules
-UPDATE_INTERVAL: Final = timedelta(hours=12)
+# Update interval - default is 12 hours, configurable via options
+DEFAULT_UPDATE_INTERVAL_HOURS: Final = 12
+UPDATE_INTERVAL: Final = timedelta(hours=DEFAULT_UPDATE_INTERVAL_HOURS)
+
+# Options keys
+CONF_UPDATE_INTERVAL: Final = "update_interval"
 
 # Calendar lookahead for finding next event
 CALENDAR_LOOKAHEAD_DAYS: Final = 365

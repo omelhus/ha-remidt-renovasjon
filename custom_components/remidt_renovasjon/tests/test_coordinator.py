@@ -122,6 +122,7 @@ class TestRenovasjonCoordinator:
         entry = MagicMock(spec=ConfigEntry)
         entry.entry_id = "test_entry_id"
         entry.data = MOCK_CONFIG_ENTRY_DATA.copy()
+        entry.options = {}
         return entry
 
     @pytest.fixture
