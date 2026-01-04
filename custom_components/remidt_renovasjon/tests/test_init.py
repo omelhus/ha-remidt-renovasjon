@@ -23,6 +23,9 @@ class TestAsyncSetupEntry:
         hass.data = {}
         hass.config_entries = MagicMock()
         hass.config_entries.async_forward_entry_setups = AsyncMock()
+        hass.services = MagicMock()
+        hass.services.has_service.return_value = False
+        hass.services.async_register = MagicMock()
         return hass
 
     @pytest.fixture
@@ -32,6 +35,9 @@ class TestAsyncSetupEntry:
         entry.entry_id = "test_entry_id"
         entry.title = "Test Address"
         entry.data = MOCK_CONFIG_ENTRY_DATA.copy()
+        entry.options = {}
+        entry.add_update_listener = MagicMock(return_value=lambda: None)
+        entry.async_on_unload = MagicMock()
         return entry
 
     @pytest.mark.asyncio
@@ -67,6 +73,8 @@ class TestAsyncUnloadEntry:
         hass.data = {DOMAIN: {"test_entry_id": MagicMock()}}
         hass.config_entries = MagicMock()
         hass.config_entries.async_unload_platforms = AsyncMock(return_value=True)
+        hass.services = MagicMock()
+        hass.services.async_remove = MagicMock()
         return hass
 
     @pytest.fixture
@@ -76,6 +84,7 @@ class TestAsyncUnloadEntry:
         entry.entry_id = "test_entry_id"
         entry.title = "Test Address"
         entry.data = MOCK_CONFIG_ENTRY_DATA.copy()
+        entry.options = {}
         return entry
 
     @pytest.mark.asyncio

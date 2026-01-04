@@ -14,6 +14,20 @@
         "data": {
           "address_id": "Address"
         }
+      },
+      "reconfigure": {
+        "title": "Change your address",
+        "description": "Enter a new street address to search. Example: {example}",
+        "data": {
+          "address": "Address"
+        }
+      },
+      "reconfigure_select": {
+        "title": "Select new address",
+        "description": "Found {count} matching address(es). Please select your new address:",
+        "data": {
+          "address_id": "Address"
+        }
       }
     },
     "error": {
@@ -23,7 +37,19 @@
       "unknown": "Unexpected error occurred"
     },
     "abort": {
-      "already_configured": "This address is already configured"
+      "already_configured": "This address is already configured",
+      "reconfigure_successful": "Address changed successfully"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure ReMidt Renovasjon",
+        "description": "Adjust integration settings",
+        "data": {
+          "update_interval": "Update interval (hours)"
+        }
+      }
     }
   },
   "entity": {
@@ -42,6 +68,23 @@
       },
       "glass_metall": {
         "name": "Glass and metal"
+      }
+    },
+    "binary_sensor": {
+      "restavfall_today": {
+        "name": "Residual waste today"
+      },
+      "matavfall_today": {
+        "name": "Food waste today"
+      },
+      "papir_today": {
+        "name": "Paper today"
+      },
+      "plastemballasje_today": {
+        "name": "Plastic packaging today"
+      },
+      "glass_metall_today": {
+        "name": "Glass and metal today"
       }
     }
   }

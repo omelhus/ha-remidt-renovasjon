@@ -1,0 +1,11 @@
+refresh:
+  name: Refresh
+  description: Force refresh of waste collection data from Renovasjonsportal
+  fields:
+    entry_id:
+      name: Entry ID
+      description: The config entry ID to refresh. If not specified, all entries are refreshed.
+      required: false
+      example: "abc123"
+      selector:
+        text:

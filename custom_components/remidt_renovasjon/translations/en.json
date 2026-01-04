@@ -43,6 +43,23 @@
       "glass_metall": {
         "name": "Glass and metal"
       }
+    },
+    "binary_sensor": {
+      "restavfall_today": {
+        "name": "Residual waste today"
+      },
+      "matavfall_today": {
+        "name": "Food waste today"
+      },
+      "papir_today": {
+        "name": "Paper today"
+      },
+      "plastemballasje_today": {
+        "name": "Plastic packaging today"
+      },
+      "glass_metall_today": {
+        "name": "Glass and metal today"
+      }
     }
   }
 }

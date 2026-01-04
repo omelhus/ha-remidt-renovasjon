@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -20,8 +20,9 @@ from .const import (
     CONF_ADDRESS_ID,
     CONF_ADDRESS_NAME,
     CONF_MUNICIPALITY,
+    CONF_UPDATE_INTERVAL,
+    DEFAULT_UPDATE_INTERVAL_HOURS,
     DOMAIN,
-    UPDATE_INTERVAL,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -87,16 +88,27 @@ class RenovasjonCoordinator(DataUpdateCoordinator[RenovasjonData]):
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         """Initialize the coordinator."""
+        update_interval_hours = entry.options.get(
+            CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL_HOURS
+        )
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=UPDATE_INTERVAL,
+            update_interval=timedelta(hours=update_interval_hours),
         )
         self.config_entry = entry
         self._address_id: str = entry.data[CONF_ADDRESS_ID]
         self._address_name: str = entry.data[CONF_ADDRESS_NAME]
         self._municipality: str = entry.data[CONF_MUNICIPALITY]
+
+    def update_interval_from_options(self) -> None:
+        """Update the polling interval from options."""
+        update_interval_hours = self.config_entry.options.get(
+            CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL_HOURS
+        )
+        self.update_interval = timedelta(hours=update_interval_hours)
+        _LOGGER.debug("Update interval set to %d hours", update_interval_hours)
 
     async def _async_update_data(self) -> RenovasjonData:
         """Fetch data from API."""

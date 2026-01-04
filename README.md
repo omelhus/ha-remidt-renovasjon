@@ -6,9 +6,12 @@ A Home Assistant custom integration for Norwegian waste collection schedules via
 
 - Automatic sensor creation for each waste fraction at your address
 - **Calendar integration** - view collection dates in Home Assistant's calendar
+- **Binary sensors** - "collection today" sensors for each waste type
 - Shows next collection date for each waste type
 - Supports multiple waste types: Restavfall, Matavfall, Papir, Plastemballasje, Glass og metallemballasje
 - Extra attributes include days until collection and upcoming dates
+- **Configurable update interval** via options
+- **Refresh service** to force data update on demand
 - Norwegian (Bokmal) and English translations
 
 ## Installation
@@ -61,6 +64,90 @@ To view the calendar:
 1. Go to your Home Assistant calendar view
 2. The "Renovasjon" calendar will show all upcoming collection dates
 
+## Binary Sensors
+
+The integration creates a "collection today" binary sensor for each waste fraction. These sensors are `on` when collection is scheduled for today, making them ideal for automations.
+
+## Services
+
+### `remidt_renovasjon.refresh`
+
+Force refresh of waste collection data from the API.
+
+| Parameter | Description |
+|-----------|-------------|
+| `entry_id` | (Optional) Specific config entry to refresh. If omitted, all entries are refreshed. |
+
+## Options
+
+After setup, you can configure the integration by clicking "Configure" on the integration card:
+
+- **Update interval**: How often to fetch new data (1-48 hours, default: 12)
+
+## Example Automations
+
+### Notification the day before collection
+
+```yaml
+automation:
+  - alias: "Waste collection reminder"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.renovasjon_restavfall
+        attribute: days_until
+        below: 2
+        above: 0
+    action:
+      - service: notify.mobile_app
+        data:
+          title: "Waste Collection Tomorrow"
+          message: "Remember to put out the residual waste bin!"
+```
+
+### Turn on reminder light when collection is today
+
+```yaml
+automation:
+  - alias: "Collection day indicator"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.renovasjon_restavfall_today
+        to: "on"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_indicator
+        data:
+          color_name: red
+```
+
+### Daily notification for any collection
+
+```yaml
+automation:
+  - alias: "Daily collection check"
+    trigger:
+      - platform: time
+        at: "07:00:00"
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.renovasjon_restavfall_today
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.renovasjon_matavfall_today
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.renovasjon_papir_today
+            state: "on"
+    action:
+      - service: notify.mobile_app
+        data:
+          title: "Waste Collection Today"
+          message: "Don't forget to put out your bins!"
+```
+
 ## Development
 
 ### Setup
@@ -89,11 +176,14 @@ uv run ruff format .
 ```
 custom_components/remidt_renovasjon/
 ├── api.py           # API client for renovasjonsportal.no
+├── binary_sensor.py # "Collection today" binary sensors
 ├── calendar.py      # Calendar entity for collection events
-├── config_flow.py   # Setup wizard (address search and selection)
+├── config_flow.py   # Setup wizard, options, and reconfigure flows
 ├── const.py         # Constants and configuration
 ├── coordinator.py   # Data update coordinator
+├── diagnostics.py   # Integration diagnostics
 ├── sensor.py        # Sensor entities
+├── services.yaml    # Service definitions
 └── tests/           # Unit tests
 ```
 
